@@ -1,4 +1,3 @@
-import { getValue } from "@testing-library/user-event/dist/utils";
 import { ADD_MOVIES, REMOVE_FROM_FAVOURITES, ADD_TO_FAVOURITES, SET_SHOW_FAVOURITES } from "../actions";
 
 const initialMoviesState = {
@@ -6,8 +5,8 @@ const initialMoviesState = {
 	favourites: [],
 	showFavourites: false,
 }
-
-export default function movies(state = initialMoviesState, action) {
+export function movies(state = initialMoviesState, action) {
+	console.log('movies reducer');
 	// if (action.type === ADD_MOVIES) {
 	// 	return {
 	// 		...state,
@@ -49,5 +48,24 @@ export default function movies(state = initialMoviesState, action) {
 
 		default:
 			return state;
+	}
+}
+
+const initialSearchState = { 
+	result: {} 
+}
+export function search(state = initialSearchState, action) {
+	console.log('search reducer');
+	return state;
+}
+
+const initialRootState = {
+	movies: initialMoviesState,
+	search: initialSearchState
+}
+export default function rootReducer(state = initialRootState, action) {
+	return {
+		movies: movies(state.movies, action),
+		search: search(state.search, action)
 	}
 }
