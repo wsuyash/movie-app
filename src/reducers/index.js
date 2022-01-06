@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import { ADD_MOVIES, REMOVE_FROM_FAVOURITES, ADD_TO_FAVOURITES, SET_SHOW_FAVOURITES } from "../actions";
+import { ADD_MOVIES, REMOVE_FROM_FAVOURITES, ADD_TO_FAVOURITES, SET_SHOW_FAVOURITES, ADD_SEARCH_RESULT, ADD_MOVIE_TO_LIST } from "../actions";
 
 const initialMoviesState = {
 	list: [],
@@ -47,17 +47,39 @@ export function movies(state = initialMoviesState, action) {
 				showFavourites: action.value,
 			}
 
+		case ADD_MOVIE_TO_LIST:
+			return {
+				...state,
+				list: [action.movie, ...state.list]
+			}
+
 		default:
 			return state;
 	}
 }
 
 const initialSearchState = { 
-	result: {} 
+	result: {},
+  showSearchResults: false,
 }
 export function search(state = initialSearchState, action) {
-	console.log('search reducer');
-	return state;
+	switch(action.type) {
+		case ADD_SEARCH_RESULT:
+			return {
+				...state,
+				result: action.movie,
+				showSearchResults: true
+			}
+
+		case ADD_MOVIE_TO_LIST:
+			return {
+				...state,
+				showSearchResults: false
+			}
+
+		default:
+			return state;
+	}
 }
 
 // const initialRootState = {
