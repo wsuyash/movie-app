@@ -6,12 +6,13 @@ import { addMovies } from '../actions';
 
 class App extends React.Component{
 	componentDidMount() {
-
 		const { store } = this.props;
+
 		store.subscribe(() => {
 			console.log('updated');
 			this.forceUpdate();
 		});
+
 		// Either make an api call to fetch data or 
 		// dispatch action
 
@@ -21,8 +22,9 @@ class App extends React.Component{
 	}
 
 	render () {
-		console.log('render');
-		const movies = this.props.store.getState();
+		const { list } = this.props.store.getState(); // { list: [], fav: [] }
+
+		console.log('render', this.props.store.getState());
 
 	  return (
 	    <div className="App">
@@ -35,7 +37,7 @@ class App extends React.Component{
 					</div>
 
 					<div className="list">
-						{movies.map((movie, index) => (
+						{list.map((movie, index) => (
 							<MovieCard movie={movie} key={`movies-${index}`} />					
 						))}
 					</div>
