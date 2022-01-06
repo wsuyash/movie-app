@@ -3,21 +3,15 @@ import MovieCard from './MovieCard';
 import Navbar from './Navbar';
 import { data } from '../data';
 import { addMovies, setShowFavourites } from '../actions';
-import { StoreContext } from  '../';
+import { connect } from  '../';
 
 class App extends React.Component{
 	componentDidMount() {
-		const { store } = this.props;
-
-		store.subscribe(() => {
-			this.forceUpdate();
-		});
-
-		store.dispatch(addMovies(data));
+		this.props.dispatch(addMovies(data));
 	}
 
 	isMovieFavourite = (movie) => {
-		const { movies } = this.props.store.getState();
+		const { movies } = this.props;
 
 		const index = movies.favourites.indexOf(movie);
 
@@ -30,14 +24,12 @@ class App extends React.Component{
 	}
 
 	onChangeTab = (value) => {
-		this.props.store.dispatch(setShowFavourites(value));
+		this.props.dispatch(setShowFavourites(value));
 	}
 
 	render () {
-		const { movies, search } = this.props.store.getState();
+		const { movies, search } = this.props;
 		const { list, favourites, showFavourites } = movies;
-
-		console.log('render', this.props.store.getState());
 
 		const displayMovies = showFavourites ? favourites : list;
 
@@ -56,7 +48,7 @@ class App extends React.Component{
 							<MovieCard
 								movie={movie}
 								key={`movies-${index}`}
-								dispatch={this.props.store.dispatch}
+								dispatch={this.props.dispatch}
 								isFavourite={this.isMovieFavourite(movie)}
 							/>					
 						))}
@@ -72,14 +64,22 @@ class App extends React.Component{
 	}
 }
 
-class AppWrapper extends React.Component {
-	render() {
-		return (
-			<StoreContext.Consumer>
-				{(store) => <App store={store}/>}
-			</StoreContext.Consumer>
-		);
+// class AppWrapper extends React.Component {
+// 	render() {
+// 		return (
+// 			<StoreContext.Consumer>
+// 				{(store) => <App store={store}/>}
+// 			</StoreContext.Consumer>
+// 		);
+// 	}
+// }
+
+function mapStateToProps(state) {
+	return {
+		movies: state.movies,
+		search: state.search
 	}
 }
+const connectedAppComponent = connect(mapStateToProps)(App);
 
-export default AppWrapper;
+export default connectedAppComponent;
