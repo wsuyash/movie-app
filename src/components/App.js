@@ -2,6 +2,7 @@ import React from 'react';
 import MovieCard from './MovieCard';
 import Navbar from './Navbar';
 import { data } from '../data';
+import { addMovies } from '../actions';
 
 class App extends React.Component{
 	componentDidMount() {
@@ -14,15 +15,13 @@ class App extends React.Component{
 		// Either make an api call to fetch data or 
 		// dispatch action
 
-		store.dispatch({
-			type: 'ADD_MOVIES',
-			movies: data,
-		});
+		store.dispatch(addMovies(data));
 
 		console.log('state', this.props.store.getState());
 	}
 
 	render () {
+		console.log('render');
 		const movies = this.props.store.getState();
 
 	  return (
